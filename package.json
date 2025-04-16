@@ -9,19 +9,37 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.2.0",
+    "axios": "^1.8.4",
+    "chart.js": "^4.4.9",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "d3": "^7.9.0",
+    "date-fns": "^4.1.0",
+    "fastapi": "^0.0.8",
+    "lucide-react": "^0.488.0",
+    "next": "15.3.0",
+    "numpy": "^0.0.1",
+    "pandas": "^0.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.3.0"
+    "react-icons": "^5.5.0",
+    "scikit-learn": "^0.1.0",
+    "scipy": "^0.1.4",
+    "supabase": "^2.20.12",
+    "swr": "^2.3.3",
+    "tailwind-merge": "^3.2.0",
+    "tw-animate-css": "^1.2.5"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
