@@ -3,7 +3,7 @@ import { Button } from './ui/button'; // Adjust the import path for Button if ne
 
 const Header = () => {
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-gray-800 bg-[#0E1C36]/95 backdrop-blur supports-[backdrop-filter]:bg-[#0E1C36]/80">
+        <header className="sticky px-12 top-0 z-50 w-full border-b border-gray-800 bg-[#0E1C36]/95 backdrop-blur supports-[backdrop-filter]:bg-[#0E1C36]/80">
             <div className="container flex h-16 items-center justify-between">
                 <div className="flex items-center gap-2">
                     <div className="h-8 w-8 rounded-full bg-[#C9082A]"></div>
