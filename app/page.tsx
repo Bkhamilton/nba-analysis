@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { FaChartBar, FaSyncAlt, FaGithub } from "react-icons/fa";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 
@@ -31,51 +31,7 @@ export default function Home() {
   ]
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#0E1C36] text-white">
-      {/* Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b border-gray-800 bg-[#0E1C36]/95 backdrop-blur supports-[backdrop-filter]:bg-[#0E1C36]/80">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-[#C9082A]"></div>
-            <span className="text-xl font-bold">NBA Predictor</span>
-          </div>
-          <nav className="hidden md:flex gap-6">
-            <Link href="/" className="text-sm font-medium hover:text-[#C9082A] transition-colors">
-              Home
-            </Link>
-            <Link href="/predictions" className="text-sm font-medium hover:text-[#C9082A] transition-colors">
-              Predictions
-            </Link>
-            <Link href="/teams" className="text-sm font-medium hover:text-[#C9082A] transition-colors">
-              Teams
-            </Link>
-            <Link href="/players" className="text-sm font-medium hover:text-[#C9082A] transition-colors">
-              Players
-            </Link>
-            <Link href="/methodology" className="text-sm font-medium hover:text-[#C9082A] transition-colors">
-              Methodology
-            </Link>
-          </nav>
-          <Button variant="outline" size="icon" className="md:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4 w-4"
-            >
-              <path d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-            <span className="sr-only">Toggle menu</span>
-          </Button>
-        </div>
-      </header>
-
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#0E1C36] text-white">
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative py-20 md:py-28 overflow-hidden">
@@ -231,7 +187,7 @@ export default function Home() {
         </section>
 
         {/* Loading Skeleton Example */}
-        <section className="py-12 bg-gray-900/50">
+        <section className="py-12 bg-gray-900/50 w-full">
           <div className="container">
             <h2 className="text-2xl font-bold text-center mb-8">Live Data Loading Example</h2>
             <div className="max-w-md mx-auto bg-gray-800 rounded-lg p-6 border border-gray-700">
@@ -261,19 +217,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-gray-800 py-8">
-        <div className="container flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-gray-400">Built with Next.js, FastAPI, and Scikit-Learn</p>
-          <div className="flex items-center gap-4">
-            <Link href="https://github.com" className="text-gray-400 hover:text-white transition-colors">
-              <FaGithub className="h-5 w-5" />
-              <span className="sr-only">GitHub</span>
-            </Link>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }
