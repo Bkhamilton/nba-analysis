@@ -27,9 +27,19 @@ def engineer_features(df):
         lambda x: x.rolling(10, min_periods=3).mean()  # Home score = away team's points allowed
     )
     
-    # 3. Win % (last 20 games)
+    # 3. Win % (last 40 games)
     df["home_win_pct"] = df.groupby("home_team_id")["home_win"].transform(
-        lambda x: x.rolling(20, min_periods=5).mean()
+        lambda x: x.rolling(40, min_periods=5).mean()
+    )
+
+    # Head-to-head history (last 10 games)
+    df["head_to_head_win_pct"] = df.groupby(["home_team_id", "away_team_id"])["home_win"].transform(
+        lambda x: x.shift().rolling(10, min_periods=3).mean()
+    )
+    df["head_to_head_avg_score_diff"] = (
+        df.groupby(["home_team_id", "away_team_id"])
+        .apply(lambda group: (group["home_score"] - group["away_score"]).shift().rolling(10, min_periods=3).mean())
+        .reset_index(level=[0, 1], drop=True)  # Reset the index to align with the original DataFrame
     )
     
     # 4. Rest days

@@ -22,23 +22,34 @@ HEADERS = {
     "Referer": "https://www.nba.com/"
 }
 
-def fetch_nba_schedule(year=2023):
+def fetch_nba_schedule(year=2024):
     url = f"https://data.nba.com/data/10s/v2015/json/mobile_teams/nba/{year}/league/00_full_schedule.json"
     response = requests.get(url, headers=HEADERS)
     return response.json()
 
-def parse_schedule(raw_json):
+def parse_schedule(raw_json, season):
     games = []
+    season_start_date = f"{season}-10-24"  # Hardcoded season start
+    
     for month in raw_json["lscd"]:
         for game in month["mscd"]["g"]:
+            game_date = game["gcode"].split("/")[0]  # Extract date (YYYYMMDD)
+            
+            # Skip if before season start or preseason game
+            if (pd.to_datetime(game_date) < pd.to_datetime(season_start_date)) or \
+               ("P" in game.get("gcode", "")):
+                continue
+                
             games.append({
                 "game_id": game["gid"],
-                "date": game["gcode"].split("/")[0],
+                "date": f"{game_date[:4]}-{game_date[4:6]}-{game_date[6:8]}",  # Format as YYYY-MM-DD
                 "home_team": game["h"]["ta"],
                 "away_team": game["v"]["ta"],
                 "home_score": game["h"].get("s", None),
-                "away_score": game["v"].get("s", None)
+                "away_score": game["v"].get("s", None),
+                "season_type": "Preseason" if "P" in game.get("gcode", "") else "Regular Season"
             })
+    
     return pd.DataFrame(games)
 
 def get_team_ids():
@@ -54,7 +65,13 @@ def get_team_ids():
 
 def insert_games_to_db(games_df, team_ids, season):
     """Insert games into the Supabase 'games' table."""
+    season_start = pd.to_datetime(f"{season}-10-24")
     for _, game in games_df.iterrows():
+        game_date = pd.to_datetime(game["date"])
+        if game_date < season_start:
+            print(f"Skipping preseason game {game['game_id']} on {game['date']}")
+            continue
+
         home_team_id = team_ids.get(game["home_team"])
         away_team_id = team_ids.get(game["away_team"])
 
@@ -94,9 +111,9 @@ def insert_games_to_db(games_df, team_ids, season):
 
 # Main execution
 if __name__ == "__main__":
-    season = 2023
+    season = 2024
     schedule = fetch_nba_schedule(season)
-    games_df = parse_schedule(schedule)
+    games_df = parse_schedule(schedule, season)
 
     # Fetch team IDs from the database
     team_ids = get_team_ids()

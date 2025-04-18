@@ -7,7 +7,7 @@ from sklearn.metrics import accuracy_score
 df = pd.read_csv("nba_ml_ready.csv")
 
 # Define features/target
-features = ["home_avg_pts", "away_avg_pts_allowed", "home_win_pct", "home_rest_days"]
+features = ["home_avg_pts", "away_avg_pts_allowed", "home_win_pct", "home_rest_days", "head_to_head_win_pct", "head_to_head_avg_score_diff"]
 X = df[features]
 y = df["home_win"]
 
