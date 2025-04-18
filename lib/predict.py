@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Fetch environment variables
-supabase_url = "https://qcbliwiownwlvwuxobij.supabase.co"
-supabase_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjYmxpd2lvd253bHZ3dXhvYmlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MjYxMDAsImV4cCI6MjA2MDQwMjEwMH0.K5uqmudgoXuhoyjL5DWz-NX6M0yDzyIjczIfsxqtinU"
+supabase_url = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+supabase_key = os.getenv("NEXT_PUBLIC_SUPABASE_ANON_KEY")
 
 # Validate environment variables
 if not supabase_url or not supabase_key:
