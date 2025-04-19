@@ -92,7 +92,7 @@ teams {
                 </li>
                 <li>
                   <span className="font-medium text-white">Win Percentage:</span> 
-                  <span> Home team's last 40 games</span>
+                  <span> Home team&apos;s last 40 games</span>
                 </li>
                 <li>
                   <span className="font-medium text-white">Head-to-Head:</span> 
@@ -100,7 +100,7 @@ teams {
                 </li>
                 <li>
                   <span className="font-medium text-white">Rest Days:</span> 
-                  <span> Days since home team's last game</span>
+                  <span> Days since home team&apos;s last game</span>
                 </li>
               </ul>
             </div>

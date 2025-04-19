@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { FaChartBar, FaSyncAlt, FaGithub } from "react-icons/fa";
+import { FaChartBar, FaSyncAlt } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"

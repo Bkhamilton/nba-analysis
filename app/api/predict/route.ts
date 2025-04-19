@@ -1,12 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 import { spawn } from 'child_process';
 import path from 'path';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 export async function POST(request: Request) {
     try {
@@ -87,7 +81,7 @@ export async function POST(request: Request) {
         
         // Handle different error types
         let errorMessage = 'Internal server error';
-        let statusCode = 500;
+        const statusCode = 500;
 
         if (error instanceof SyntaxError) {
             errorMessage = 'Invalid prediction response format';
