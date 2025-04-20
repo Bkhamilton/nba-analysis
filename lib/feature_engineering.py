@@ -29,17 +29,16 @@ def engineer_features(df):
     
     # 3. Win % (last 40 games)
     df["home_win_pct"] = df.groupby("home_team_id")["home_win"].transform(
-        lambda x: x.rolling(40, min_periods=5).mean()
+        lambda x: x.rolling(82, min_periods=5).mean()
     )
 
-    # Head-to-head history (last 10 games)
+    # Head-to-head history (last 5 games)
     df["head_to_head_win_pct"] = df.groupby(["home_team_id", "away_team_id"])["home_win"].transform(
-        lambda x: x.shift().rolling(10, min_periods=3).mean()
+        lambda x: x.shift().rolling(5, min_periods=3).mean()
     )
     df["head_to_head_avg_score_diff"] = (
-        df.groupby(["home_team_id", "away_team_id"])
-        .apply(lambda group: (group["home_score"] - group["away_score"]).shift().rolling(10, min_periods=3).mean())
-        .reset_index(level=[0, 1], drop=True)  # Reset the index to align with the original DataFrame
+        df.groupby(["home_team_id", "away_team_id"], group_keys=False)
+        .apply(lambda group: (group["home_score"] - group["away_score"]).shift().rolling(10, min_periods=3).mean(), include_groups=False)
     )
     
     # 4. Rest days
@@ -54,4 +53,4 @@ def engineer_features(df):
 # Save to Supabase or CSV
 df = fetch_games()
 engineered_df = engineer_features(df)
-engineered_df.to_csv("nba_ml_ready.csv", index=False)
+engineered_df.to_csv("models/nba_ml_ready.csv", index=False)

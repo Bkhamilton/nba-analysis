@@ -97,7 +97,7 @@ if __name__ == "__main__":
         features_df = pd.DataFrame([features], columns=feature_names)  # Wrap features in a DataFrame
         
         # Load model and predict
-        model = joblib.load('nba_win_predictor.joblib')
+        model = joblib.load('models/nba_win_predictor.joblib')
         probability = model.predict_proba(features_df)[0][1]
         
         # Output result with feature details
