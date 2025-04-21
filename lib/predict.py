@@ -54,6 +54,7 @@ def prepare_features(home_team_id, away_team_id, home_rest_days):
         'avg_pts': 110.0,           # League average
         'avg_pts_allowed': 110.0,    # League average
         'win_pct': 0.5,              # Neutral win probability
+        'home_net_rating': 0.0,        # No net rating assumption
         'win_pct_h2h': 0.5,          # No prior matchup assumption
         'score_diff_h2h': 0.0        # Even scoring
     }
@@ -63,6 +64,7 @@ def prepare_features(home_team_id, away_team_id, home_rest_days):
         home_stats['avg_pts'] if home_stats else default_values['avg_pts'],
         away_stats['avg_pts_allowed'] if away_stats else default_values['avg_pts_allowed'],
         home_stats['win_pct'] if home_stats else default_values['win_pct'],
+        home_stats['home_net_rating'] if home_stats else default_values['home_net_rating'],
         home_rest_days,
         h2h_stats['win_pct'] if h2h_stats else default_values['win_pct_h2h'],
         h2h_stats['avg_score_diff'] if h2h_stats else default_values['score_diff_h2h']
@@ -90,6 +92,7 @@ if __name__ == "__main__":
             "home_avg_pts",
             "away_avg_pts_allowed",
             "home_win_pct",
+            "home_net_rating",
             "home_rest_days",
             "head_to_head_win_pct",
             "head_to_head_avg_score_diff"
