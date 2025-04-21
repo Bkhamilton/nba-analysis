@@ -15,7 +15,15 @@ y = df["home_win"]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Train model
-model = RandomForestClassifier(n_estimators=100, random_state=42)
+hyperparameters = {
+    "n_estimators": 196,
+    "max_depth": 22,
+    "min_samples_split": 15,
+    "min_samples_leaf": 7,
+    "max_features": None,
+    "random_state": 42
+}
+model = RandomForestClassifier(**hyperparameters)
 model.fit(X_train, y_train)
 
 # Log feature importance
