@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 
         // Call Python script
         const pythonProcess = spawn('python', [
-            path.join(process.cwd(), 'lib\\predict.py'),
+            path.join(process.cwd(), 'lib\\predict2.py'),
             JSON.stringify({
                 home_team_id: homeTeamId,
                 away_team_id: awayTeamId,
@@ -65,15 +65,11 @@ export async function POST(request: Request) {
             );
         }
 
+        // Return the full prediction result
         return NextResponse.json({
             success: true,
-            homeWinProbability: predictionResult.probability,
-            featureDetails: predictionResult.features,
-            metadata: {
-                homeTeamId,
-                awayTeamId,
-                homeRestDays
-            }
+            predictions: predictionResult.predictions, // Include predictions
+            metadata: predictionResult.metadata        // Include metadata
         });
 
     } catch (error) {

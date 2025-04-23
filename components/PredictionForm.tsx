@@ -8,12 +8,28 @@ type Team = {
   abbreviation: string;
 };
 
+type Probability = {
+  basic_model: {
+    probability: number;
+    accuracy: number;
+  };
+  advanced_model: {
+    probability: number;
+    accuracy: number;
+  };
+};
+
 export default function PredictionForm() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [homeTeamId, setHomeTeamId] = useState<number | null>(null);
   const [awayTeamId, setAwayTeamId] = useState<number | null>(null);
   const [homeRestDays, setHomeRestDays] = useState(2); // Default to 2 days rest
-  const [prediction, setPrediction] = useState<number | null>(null);
+  const [prediction, setPrediction] = useState<Probability | null>(null);
+  const [metadata, setMetadata] = useState<{
+    home_team_id: number;
+    away_team_id: number;
+    home_rest_days: number;
+  } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -65,12 +81,18 @@ export default function PredictionForm() {
       });
 
       const data = await res.json();
+      console.log('API Response:', data);
       
       if (!res.ok) {
         throw new Error(data.error || 'Prediction failed');
       }
 
-      setPrediction(data.homeWinProbability);
+      setPrediction(data.predictions);
+      setMetadata({
+        home_team_id: homeTeamId,
+        away_team_id: awayTeamId,
+        home_rest_days: homeRestDays
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
       console.error('Prediction error:', err);
@@ -156,17 +178,50 @@ export default function PredictionForm() {
         </button>
       </form>
 
-      {prediction !== null && (
-        <div className="mt-6 p-4 bg-gray-700 rounded-lg">
-          <h3 className="font-bold">Prediction Result</h3>
-          <p className="mt-2">
-            Home team win probability: <span className="text-[#C9082A] font-bold">{(prediction * 100).toFixed(1)}%</span>
-          </p>
-          <div className="w-full bg-gray-600 rounded-full h-2.5 mt-2">
-            <div
-              className="bg-[#C9082A] h-2.5 rounded-full"
-              style={{ width: `${prediction * 100}%` }}
-            ></div>
+      {prediction && (
+        <div className="mt-6 space-y-6">
+          {/* Basic Model Prediction */}
+          <div className="p-4 bg-gray-700 rounded-lg">
+            <h3 className="font-bold">Basic Model Prediction</h3>
+            <p className="mt-2">
+              Home team win probability:{" "}
+              <span className="text-[#C9082A] font-bold">
+                {(prediction.basic_model.probability * 100).toFixed(1)}%
+              </span>
+            </p>
+            <div className="w-full bg-gray-600 rounded-full h-2.5 mt-2">
+              <div
+                className="bg-[#C9082A] h-2.5 rounded-full"
+                style={{
+                  width: `${prediction.basic_model.probability * 100}%`,
+                }}
+              ></div>
+            </div>
+            <p className="text-sm text-gray-400 mt-2">
+              Accuracy: {(prediction.basic_model.accuracy * 100).toFixed(1)}%
+            </p>
+          </div>
+
+          {/* Advanced Model Prediction */}
+          <div className="p-4 bg-gray-700 rounded-lg">
+            <h3 className="font-bold">Advanced Model Prediction</h3>
+            <p className="mt-2">
+              Home team win probability:{" "}
+              <span className="text-[#C9082A] font-bold">
+                {(prediction.advanced_model.probability * 100).toFixed(1)}%
+              </span>
+            </p>
+            <div className="w-full bg-gray-600 rounded-full h-2.5 mt-2">
+              <div
+                className="bg-[#C9082A] h-2.5 rounded-full"
+                style={{
+                  width: `${prediction.advanced_model.probability * 100}%`,
+                }}
+              ></div>
+            </div>
+            <p className="text-sm text-gray-400 mt-2">
+              Accuracy: {(prediction.advanced_model.accuracy * 100).toFixed(1)}%
+            </p>
           </div>
         </div>
       )}
