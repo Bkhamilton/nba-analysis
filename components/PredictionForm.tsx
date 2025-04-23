@@ -25,11 +25,6 @@ export default function PredictionForm() {
   const [awayTeamId, setAwayTeamId] = useState<number | null>(null);
   const [homeRestDays, setHomeRestDays] = useState(2); // Default to 2 days rest
   const [prediction, setPrediction] = useState<Probability | null>(null);
-  const [metadata, setMetadata] = useState<{
-    home_team_id: number;
-    away_team_id: number;
-    home_rest_days: number;
-  } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -56,7 +51,7 @@ export default function PredictionForm() {
       }
     };
     fetchTeams();
-  }, []);
+  }, [supabase]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,11 +83,6 @@ export default function PredictionForm() {
       }
 
       setPrediction(data.predictions);
-      setMetadata({
-        home_team_id: homeTeamId,
-        away_team_id: awayTeamId,
-        home_rest_days: homeRestDays
-      });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
       console.error('Prediction error:', err);
