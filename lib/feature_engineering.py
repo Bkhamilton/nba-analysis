@@ -21,6 +21,11 @@ def engineer_features(df):
     df["home_avg_pts"] = df.groupby("home_team_id")["home_score"].transform(
         lambda x: x.rolling(10, min_periods=3).mean()
     )
+
+    # 1. Add away team offensive stats
+    df["away_avg_pts_scored"] = df.groupby("away_team_id")["away_score"].transform(
+        lambda x: x.rolling(10, min_periods=3).mean()
+    )
     
     # 2. Rolling stats for away team (defense)
     df["away_avg_pts_allowed"] = df.groupby("away_team_id")["home_score"].transform(
@@ -33,24 +38,15 @@ def engineer_features(df):
     )
 
     ## Net rating (last 10 games)
-    df["home_net_rating"] = df.groupby("home_team_id")["home_score"].transform(
-        lambda x: x.rolling(60, min_periods=3).mean()
-    ) - df.groupby("home_team_id")["away_score"].transform(
-        lambda x: x.rolling(60, min_periods=3).mean()
-    )   
-
-    # Head-to-head history (last 5 games)
-    df["head_to_head_win_pct"] = df.groupby(["home_team_id", "away_team_id"])["home_win"].transform(
-        lambda x: x.shift().rolling(5, min_periods=3).mean()
-    )
-    df["head_to_head_avg_score_diff"] = (
-        df.groupby(["home_team_id", "away_team_id"], group_keys=False)
-        .apply(lambda group: (group["home_score"] - group["away_score"]).shift().rolling(10, min_periods=3).mean(), include_groups=False)
-    )
+    df["home_net_rating"] = (df.groupby("home_team_id")["home_score"].transform(
+        lambda x: x.rolling(10, min_periods=5).mean()
+    ) / df.groupby("home_team_id")["away_score"].transform(
+        lambda x: x.rolling(10, min_periods=5).mean()
+    ))  # Ratio is more stable than difference
     
     # 4. Rest days
     df["date"] = pd.to_datetime(df["date"])
-    df["home_rest_days"] = df.groupby("home_team_id")["date"].diff().dt.days.fillna(7)
+    df["home_rest_days"] = df.groupby("home_team_id")["date"].diff().dt.days.clip(1, 10)
     
     # Filter out preseason and incomplete records
     df = df.dropna(subset=["home_avg_pts", "away_avg_pts_allowed"])

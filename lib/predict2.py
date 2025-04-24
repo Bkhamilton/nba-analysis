@@ -93,7 +93,6 @@ def prepare_features_for_model1(home_team_id, away_team_id, home_rest_days):
     # Fetch all required data
     home_stats = fetch_team_stats(home_team_id, is_home=True)
     away_stats = fetch_team_stats(away_team_id, is_home=False)
-    h2h_stats = fetch_head_to_head_stats(home_team_id, away_team_id)
     
     # Fallback values if data is missing
     default_values = {
@@ -101,19 +100,16 @@ def prepare_features_for_model1(home_team_id, away_team_id, home_rest_days):
         'avg_pts_allowed': 110.0,    # League average
         'win_pct': 0.5,              # Neutral win probability
         'home_net_rating': 0.0,        # No net rating assumption
-        'win_pct_h2h': 0.5,          # No prior matchup assumption
-        'score_diff_h2h': 0.0        # Even scoring
     }
     
     # Prepare features in EXACT same order as model training
     return [
         home_stats['avg_pts'] if home_stats else default_values['avg_pts'],
+        away_stats['avg_pts'] if away_stats else default_values['avg_pts'],
         away_stats['avg_pts_allowed'] if away_stats else default_values['avg_pts_allowed'],
         home_stats['win_pct'] if home_stats else default_values['win_pct'],
         home_stats['home_net_rating'] if home_stats else default_values['home_net_rating'],
         home_rest_days,
-        h2h_stats['win_pct'] if h2h_stats else default_values['win_pct_h2h'],
-        h2h_stats['avg_score_diff'] if h2h_stats else default_values['score_diff_h2h']
     ]
 
 def prepare_features_for_model2(home_team_id, away_team_id, home_rest_days):
@@ -225,7 +221,14 @@ if __name__ == "__main__":
         model2 = joblib.load('models/nba_win_predictor2.joblib')
         
         # Convert features to DataFrame with proper column names
-        feature_names_model1 = ["home_avg_pts", "away_avg_pts_allowed", "home_win_pct", "home_net_rating", "home_rest_days", "head_to_head_win_pct", "head_to_head_avg_score_diff"]
+        feature_names_model1 = [
+            "home_avg_pts", 
+            "away_avg_pts_scored",
+            "away_avg_pts_allowed", 
+            "home_win_pct", 
+            "home_net_rating", 
+            "home_rest_days", 
+        ]
         feature_names_model2 = [
             "home_avg_pts", 
             "away_avg_pts_allowed", 
@@ -267,11 +270,11 @@ if __name__ == "__main__":
             "predictions": {
                 "basic_model": {
                     "probability": prob_model1,
-                    "accuracy": 0.657  # From your training
+                    "accuracy": 0.711  # From your training
                 },
                 "advanced_model": {
                     "probability": prob_model2,
-                    "accuracy": 0.594  # Update with actual accuracy
+                    "accuracy": 0.606  # Update with actual accuracy
                 }
             },
             "metadata": {
