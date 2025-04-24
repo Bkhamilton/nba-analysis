@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 
         // Call Python script
         const pythonProcess = spawn('python', [
-            path.join(process.cwd(), 'lib\\predict2.py'),
+            path.join(process.cwd(), 'lib\\predict.py'),
             JSON.stringify({
                 home_team_id: homeTeamId,
                 away_team_id: awayTeamId,

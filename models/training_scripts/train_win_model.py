@@ -63,11 +63,11 @@ plt.figure(figsize=(10,6))
 plt.barh(features, model.feature_importances_)
 plt.title("Feature Importance")
 plt.tight_layout()
-plt.savefig('models/feature_importance.png')
+plt.savefig('models/results/feature_importance.png')
 plt.close()
 
 # Save evaluation metrics to file
-with open("models/evaluation_metrics.txt", "w") as f:
+with open("models/results/evaluation_metrics.txt", "w") as f:
     f.write(f"Accuracy: {accuracy_score(y_test, predictions):.2%}\n")
     f.write("\nClassification Report:\n")
     f.write(classification_report(y_test, predictions))

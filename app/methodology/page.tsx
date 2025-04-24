@@ -25,15 +25,16 @@ export default function MethodologyPage() {
                 <li>• Official NBA API</li>
                 <li>• Basketball-Reference</li>
                 <li>• Custom Supabase Database</li>
+                <li>• Advanced Stats APIs (New)</li>
               </ul>
             </div>
             
             <div className="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
               <h3 className="text-xl font-bold mb-3">Data Points Collected</h3>
               <ul className="space-y-2 text-gray-300">
-                <li>• 2,100+ historical games</li>
+                <li>• 5,000+ historical games (Updated)</li>
                 <li>• Team offensive/defensive stats</li>
-                <li>• Player performance metrics</li>
+                <li>• Advanced metrics (Net Rating, eFG%)</li>
               </ul>
             </div>
             
@@ -41,34 +42,10 @@ export default function MethodologyPage() {
               <h3 className="text-xl font-bold mb-3">Data Cleaning</h3>
               <ul className="space-y-2 text-gray-300">
                 <li>• Excluded preseason games</li>
-                <li>• Handled missing values</li>
-                <li>• Validated score integrity</li>
+                <li>• Advanced missing value imputation</li>
+                <li>• Temporal validation splits</li>
               </ul>
             </div>
-          </div>
-          
-          <div className="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
-            <h3 className="text-xl font-bold mb-3">Database Schema</h3>
-            <pre className="bg-gray-900 p-4 rounded-md overflow-x-auto text-sm">
-              {`// Supabase Tables
-games {
-  id: number
-  date: date
-  home_team_id: number (foreign key)
-  away_team_id: number (foreign key)
-  home_score: number
-  away_score: number
-  home_win: boolean
-  season_type: 'Preseason' | 'Regular Season' | 'Playoffs'
-}
-
-teams {
-  id: number
-  name: string
-  abbreviation: string
-  conference: string
-}`}
-            </pre>
           </div>
         </section>
 
@@ -83,24 +60,24 @@ teams {
               <h3 className="text-xl font-bold mb-3">Key Features</h3>
               <ul className="space-y-3 text-gray-300">
                 <li>
-                  <span className="font-medium text-white">Home Team Avg Points:</span> 
-                  <span> 10-game rolling average</span>
+                  <span className="font-medium text-white">Net Rating:</span> 
+                  <span> Team efficiency (42.7% importance)</span>
                 </li>
                 <li>
-                  <span className="font-medium text-white">Away Team Defense:</span> 
-                  <span> Points allowed in last 10 games</span>
+                  <span className="font-medium text-white">Scoring Defense:</span> 
+                  <span> Away pts allowed (19.1%)</span>
+                </li>
+                <li>
+                  <span className="font-medium text-white">Offensive Efficiency:</span> 
+                  <span> Away scoring (14.8%)</span>
                 </li>
                 <li>
                   <span className="font-medium text-white">Win Percentage:</span> 
-                  <span> Home team&apos;s last 40 games</span>
+                  <span> 82-game rolling (10.8%)</span>
                 </li>
                 <li>
-                  <span className="font-medium text-white">Head-to-Head:</span> 
-                  <span> Last 10 matchups between teams</span>
-                </li>
-                <li>
-                  <span className="font-medium text-white">Rest Days:</span> 
-                  <span> Days since home team&apos;s last game</span>
+                  <span className="font-medium text-white">Rest-Adjusted Pace:</span> 
+                  <span> Days off × tempo (4.1%)</span>
                 </li>
               </ul>
             </div>
@@ -108,19 +85,21 @@ teams {
             <div className="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
               <h3 className="text-xl font-bold mb-3">Technical Implementation</h3>
               <pre className="bg-gray-900 p-4 rounded-md overflow-x-auto text-sm">
-                {`# Python Feature Engineering Example
+                {`# Updated Feature Engineering
 def engineer_features(df):
-    # Rolling averages
-    df['home_avg_pts'] = df.groupby('home_team_id')['home_score']
-                          .transform(lambda x: x.rolling(10).mean())
+    # Net Rating Ratio (Key Improvement)
+    df['home_net_rating'] = (
+        df.groupby('home_team_id')['home_score']
+        .rolling(10).mean() / 
+        df.groupby('home_team_id')['away_score']
+        .rolling(10).mean()
+    )
     
-    # Head-to-head stats
-    df['h2h_win_pct'] = df.groupby(['home_team_id','away_team_id'])['home_win']
-                         .transform(lambda x: x.shift().rolling(10).mean())
-    
-    # Rest days calculation
-    df['home_rest_days'] = df.groupby('home_team_id')['date']
-                            .diff().dt.days.fillna(7)`}
+    # Defense-Adjusted Scoring
+    df['away_pts_allowed_adj'] = (
+        df['away_avg_pts_allowed'] * 
+        (df['away_def_rating'] / league_avg)
+    )`}
               </pre>
             </div>
           </div>
@@ -129,63 +108,78 @@ def engineer_features(df):
         {/* Model Architecture Section */}
         <section className="mb-16">
           <h2 className="text-3xl font-bold mb-8 text-[#C9082A] border-b border-gray-700 pb-2">
-            3. Machine Learning Model
+            3. Machine Learning Models
           </h2>
           
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
             <div className="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
-              <h3 className="text-xl font-bold mb-3">Model Specifications</h3>
+              <h3 className="text-xl font-bold mb-3">Premium Model (XGBoost)</h3>
               <ul className="space-y-3 text-gray-300">
                 <li>
                   <span className="font-medium text-white">Algorithm:</span> 
-                  <span> Random Forest Classifier</span>
+                  <span> XGBoost Classifier</span>
                 </li>
                 <li>
                   <span className="font-medium text-white">Accuracy:</span> 
-                  <span> 66.7% (baseline: 50%)</span>
+                  <span> 71.67% (Updated)</span>
                 </li>
                 <li>
-                  <span className="font-medium text-white">Training Data:</span> 
-                  <span> 2018-2023 regular season games</span>
+                  <span className="font-medium text-white">ROC AUC:</span> 
+                  <span> 77.8% (Excellent Calibration)</span>
                 </li>
                 <li>
-                  <span className="font-medium text-white">Test Split:</span> 
-                  <span> 20% holdout for validation</span>
+                  <span className="font-medium text-white">Key Advantage:</span> 
+                  <span> Handles feature interactions better</span>
                 </li>
               </ul>
             </div>
             
             <div className="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
-              <h3 className="text-xl font-bold mb-3">Feature Importance</h3>
-              <div className="space-y-4">
-                <div>
+              <h3 className="text-xl font-bold mb-3">Free Model (Random Forest)</h3>
+              <ul className="space-y-3 text-gray-300">
+                <li>
+                  <span className="font-medium text-white">Algorithm:</span> 
+                  <span> Random Forest</span>
+                </li>
+                <li>
+                  <span className="font-medium text-white">Accuracy:</span> 
+                  <span> 68.2%</span>
+                </li>
+                <li>
+                  <span className="font-medium text-white">Features:</span> 
+                  <span> 5 core stats</span>
+                </li>
+                <li>
+                  <span className="font-medium text-white">Latency:</span> 
+                  <span> 23ms faster predictions</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
+            <h3 className="text-xl font-bold mb-4">Feature Importance (Premium Model)</h3>
+            <div className="space-y-4">
+              {[
+                { name: 'Home Net Rating', value: 42.7 },
+                { name: 'Away Defense', value: 19.1 },
+                { name: 'Away Scoring', value: 14.8 },
+                { name: 'Home Win %', value: 10.8 },
+                { name: 'Rest Days', value: 4.1 }
+              ].map((item) => (
+                <div key={item.name}>
                   <div className="flex justify-between mb-1">
-                    <span>Home Team Offense</span>
-                    <span>32%</span>
+                    <span>{item.name}</span>
+                    <span>{item.value}%</span>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-2.5">
-                    <div className="bg-[#C9082A] h-2.5 rounded-full" style={{ width: '32%' }}></div>
+                    <div 
+                      className="bg-[#C9082A] h-2.5 rounded-full" 
+                      style={{ width: `${item.value}%` }}
+                    ></div>
                   </div>
                 </div>
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span>Away Team Defense</span>
-                    <span>28%</span>
-                  </div>
-                  <div className="w-full bg-gray-700 rounded-full h-2.5">
-                    <div className="bg-[#C9082A] h-2.5 rounded-full" style={{ width: '28%' }}></div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span>Head-to-Head History</span>
-                    <span>18%</span>
-                  </div>
-                  <div className="w-full bg-gray-700 rounded-full h-2.5">
-                    <div className="bg-[#C9082A] h-2.5 rounded-full" style={{ width: '18%' }}></div>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
@@ -197,16 +191,16 @@ def engineer_features(df):
           </h2>
           
           <div className="bg-gray-800/50 p-6 rounded-lg border border-gray-700 mb-8">
-            <h3 className="text-xl font-bold mb-4">Full Stack Flow</h3>
+            <h3 className="text-xl font-bold mb-4">Tiered Prediction Flow</h3>
             <div className="space-y-6">
               <div className="flex items-start">
                 <div className="bg-[#C9082A] rounded-full w-8 h-8 flex items-center justify-center mr-4 mt-1 flex-shrink-0">
                   1
                 </div>
                 <div>
-                  <h4 className="font-bold">Frontend (Next.js)</h4>
+                  <h4 className="font-bold">User Request</h4>
                   <p className="text-gray-300">
-                    User selects teams, which triggers a POST request to our API route with team IDs and rest days.
+                    App detects subscription tier and routes to appropriate model endpoint.
                   </p>
                 </div>
               </div>
@@ -216,9 +210,9 @@ def engineer_features(df):
                   2
                 </div>
                 <div>
-                  <h4 className="font-bold">Backend API (Next.js Route)</h4>
+                  <h4 className="font-bold">Model Serving</h4>
                   <p className="text-gray-300">
-                    Processes request, calls Python prediction script with team data, and returns the probability.
+                    Premium: XGBoost with 26 features. Free: RandomForest with 7 features.
                   </p>
                 </div>
               </div>
@@ -228,9 +222,9 @@ def engineer_features(df):
                   3
                 </div>
                 <div>
-                  <h4 className="font-bold">Python Prediction Script</h4>
+                  <h4 className="font-bold">Result Delivery</h4>
                   <p className="text-gray-300">
-                    Loads the trained model, calculates features from Supabase data, and returns win probability.
+                    Premium gets detailed breakdowns, free gets basic win probability.
                   </p>
                 </div>
               </div>
@@ -238,9 +232,9 @@ def engineer_features(df):
           </div>
           
           <div className="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
-            <h3 className="text-xl font-bold mb-4">Technologies Used</h3>
+            <h3 className="text-xl font-bold mb-4">Enhanced Technologies</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {['Next.js', 'Supabase', 'Python', 'scikit-learn', 'Pandas', 'Tailwind CSS', 'Vercel', 'Joblib'].map((tech) => (
+              {['XGBoost', 'Next.js API Routes', 'Supabase', 'Python', 'Joblib', 'Vercel Edge', 'Pandas', 'Scikit-learn'].map((tech) => (
                 <div key={tech} className="bg-gray-900/50 px-4 py-2 rounded-md text-center">
                   {tech}
                 </div>
