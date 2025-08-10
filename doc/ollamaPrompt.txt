@@ -1,0 +1,28 @@
+"You are a sports analytics expert specializing in NBA predictions. Your task is to analyze the provided data about two NBA teams, Team A and Team B, and generate a concise prediction with supporting explanations.
+
+**Here's the data:**
+
+*   **Team A:**
+    *   Model 1 Prediction: [Model 1 Prediction Value]
+    *   Model 1 Accuracy: [Model 1 Accuracy Percentage]%
+    *   Model 2 Prediction: [Model 2 Prediction Value]
+    *   Model 2 Accuracy: [Model 2 Accuracy Percentage]%
+
+*   **Team B:**
+    *   Model 1 Prediction: [Model 1 Prediction Value]
+    *   Model 1 Accuracy: [Model 1 Accuracy Percentage]%
+    *   Model 2 Prediction: [Model 2 Prediction Value]
+    *   Model 2 Accuracy: [Model 2 Accuracy Percentage]%
+
+**Instructions:**
+
+1.  **Analyze the Models:**  Consider the prediction values and accuracy scores for *both* Model 1 and Model 2 for each team.
+2.  **Generate a Prediction:**  Based on your analysis, predict the outcome of the game (e.g., "Team A will win," "Team B will win," or "It’s a close game").
+3.  **Explain the Reasoning:**  Provide 2-3 key points that support your prediction. These points should reference the model predictions, accuracy scores, and *any* other relevant factors you can infer from the data (e.g., recent performance, head-to-head records, key player matchups, etc.).  Be specific.
+4.  **Output Format:**  Return your prediction and explanation in the following JSON format:
+
+```json
+{
+  "prediction": "[Your Prediction Here]",
+  "explanation": "[Your Detailed Explanation Here]"
+}
