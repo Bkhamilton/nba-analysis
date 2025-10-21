@@ -1,5 +1,26 @@
 import { NextResponse } from 'next/server';
 
+interface ModelPrediction {
+    probability: number;
+    accuracy: number;
+}
+
+interface Predictions {
+    basic_model: ModelPrediction;
+    advanced_model: ModelPrediction;
+}
+
+interface Metadata {
+    home_team_id: number;
+    away_team_id: number;
+    home_rest_days: number;
+}
+
+interface TeamNames {
+    home?: string;
+    away?: string;
+}
+
 export async function POST(request: Request) {
     try {
         const { predictions, metadata, teamNames } = await request.json();
@@ -50,9 +71,8 @@ export async function POST(request: Request) {
     }
 }
 
-function createExplanationPrompt(predictions: any, metadata: any, teamNames?: any) {
+function createExplanationPrompt(predictions: Predictions, metadata: Metadata, teamNames?: TeamNames) {
     const basicModel = predictions.basic_model;
-    const advancedModel = predictions.advanced_model;
     
     const homeTeam = teamNames?.home || `Team ${metadata.home_team_id}`;
     const awayTeam = teamNames?.away || `Team ${metadata.away_team_id}`;
